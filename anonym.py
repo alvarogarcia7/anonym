@@ -25,7 +25,7 @@ import ipaddress
 import random
 import traceback
 
-VERSION = "1.04"
+VERSION = "1.05"
 TOOL_NAME = f"Anonym {VERSION}" 
 
 args = None          # Parsed command line arguments
@@ -143,10 +143,10 @@ class Field:
 	def _recursive_find(self, data):
 		""" Recursively find all matching elements in the JSON structure """
 		matches = []
-		
+
 		# Extract the field name we're looking for (after the ..)
 		field_name = self.field_spec.split('..')[-1]
-		
+
 		def _search_dict(obj, path):
 			if isinstance(obj, dict):
 				for key, value in obj.items():
@@ -159,7 +159,7 @@ class Field:
 				for i, item in enumerate(obj):
 					if isinstance(item, (dict, list)):
 						_search_dict(item, path + [i])
-		
+
 		_search_dict(data, [])
 		return matches
 
@@ -169,7 +169,7 @@ class JsonPathMatch:
 		self.full_path = self
 		self.value = value
 		self._path = path
-	
+
 	def update(self, data, new_value):
 		""" Update the value at the specified path """
 		current = data
@@ -178,7 +178,7 @@ class JsonPathMatch:
 				current = current[part]
 			elif isinstance(current, list):
 				current = current[int(part)]
-		
+
 		if isinstance(current, dict):
 			current[self._path[-1]] = new_value
 		elif isinstance(current, list):
@@ -329,7 +329,12 @@ class CoordField(Field):
 		# We randomize with up to 0.5 degree difference (+/-50km)
 		val = "%.3f" % (float_val + (random.randrange(1000) - 500) * 0.001)
 		return self.type(val)
-	
+
+class ProductField(Field):
+	""" Anonymize products """
+	def anonymize_data(self, data):
+		return fake.ecommerce_name()
+
 class PriceField(Field):
 	def anonymize_data(self, data):
 		return fake.pyfloat(left_digits=3, right_digits=2, positive=True)
@@ -349,7 +354,7 @@ class AddressField(Field):
 class AddressFieldZip(Field):
 	def anonymize_data(self, data):
 		return fake.zipcode()
-	
+
 class HostnameField(Field):
 	def anonymize_data(self, data):
 		return fake.hostname()
@@ -364,7 +369,7 @@ def parse_params():
 	""" Parse parameters. """
 	global args, handler_defs
 
-	
+
 	parser = argparse.ArgumentParser(description=TOOL_NAME+" - data anonymization tool")
 	parser.add_argument("files", nargs='+', help="Names of the data file(s) to anonymize")
 	
@@ -374,6 +379,7 @@ def parse_params():
 	parser.add_argument("-Fi", "--field-ip",    help="Field containing IPs",            type=str, action='append')
 	parser.add_argument("-Fc", "--field-coord", help="Field containing coordinates",    type=str, action='append')
 	parser.add_argument("-Fh", "--field-host",  help="Field containing host names",     type=str, action='append')
+	parser.add_argument("-Fp", "--field-product", help="Field containing product", 		type=str, action='append')
 	parser.add_argument("-Fpr", "--field-price", help="Field containing price", 			type=str, action='append')
 	parser.add_argument("-Fpn", "--field-product-name", help="Field containing product name", 	type=str, action='append')
 	parser.add_argument("-Fcn", "--field-company-name", help="Field containing company name", 	type=str, action='append')
@@ -394,13 +400,14 @@ def parse_params():
 	handler_defs.extend(process_field_param(args.field_ip,    IPField))
 	handler_defs.extend(process_field_param(args.field_coord, CoordField))
 	handler_defs.extend(process_field_param(args.field_host,  HostField))
-	handler_defs.extend(process_field_param(args.field_price, PriceField))	
-	handler_defs.extend(process_field_param(args.field_product_name, ProductNameField))	
-	handler_defs.extend(process_field_param(args.field_company_name, CompanyNameField))	
-	handler_defs.extend(process_field_param(args.field_address_street, AddressField))	
-	handler_defs.extend(process_field_param(args.field_address_zip, AddressFieldZip))	
-	handler_defs.extend(process_field_param(args.field_hostname, HostField))	
-	handler_defs.extend(process_field_param(args.field_word, WordField))	
+	handler_defs.extend(process_field_param(args.field_product, ProductField))
+	handler_defs.extend(process_field_param(args.field_price, PriceField))
+	handler_defs.extend(process_field_param(args.field_product_name, ProductNameField))
+	handler_defs.extend(process_field_param(args.field_company_name, CompanyNameField))
+	handler_defs.extend(process_field_param(args.field_address_street, AddressField))
+	handler_defs.extend(process_field_param(args.field_address_zip, AddressFieldZip))
+	handler_defs.extend(process_field_param(args.field_hostname, HostField))
+	handler_defs.extend(process_field_param(args.field_word, WordField))
 
 	# Check output folder
 	if not os.path.isdir(args.output_folder):
@@ -475,7 +482,7 @@ def process():
 		print("Processing " + file)
 		
 		try:
-			in_file = open(file, 'r', encoding='utf-8-sig') 
+			in_file = open(file, 'r', encoding='utf-8-sig')
 		except:
 			error("Error opening input file: "+file, True)
 		

@@ -54,6 +54,8 @@ optional arguments:
                         Field containing coordinates
   -Fh FIELD_HOST, --field-host FIELD_HOST
                         Field containing host names
+  -Fp FIELD_PRODUCT, --field-product FIELD_PRODUCT
+                        Field containing product names
   -t {csv,json}, --type {csv,json}
                         Type of input files; valid values - 'csv' (default),
                         'json'
@@ -140,3 +142,7 @@ Version 1.04:
 * Minor bug fixes: correcting type handling, random seed
 * Updating test masters to account for newline characters
 * Added new unit tests for CIDR IPs and hostnames with different parts
+
+Version 1.05:
+
+* Added "Product Name" field type
