@@ -6,17 +6,31 @@ OUT=./output
 rm -rf $OUT
 mkdir $OUT
 
+ERROR_COUNT=0
+
 # Run test and compare screen output to master
 test() {
+  DELTA=0
   echo "Testing: $1"
   python3 ../anonym.py $3 >$OUT/$2.out 2>&1
   diff ./master/$2.out $OUT/$2.out
+  if [ $? -ne 0 ]; then
+    echo "Output file $4 differs from master!"
+    DELTA=1
+  fi
+  ERROR_COUNT=$((ERROR_COUNT+DELTA))
 }
 
 # Run test and compare screen output to master, and output file to master output file
 test_file() {
+  DELTA=0
   test "$1" "$2" "$3"
   diff ./master/$4 $OUT/$4
+  if [ $? -ne 0 ]; then
+    echo "Output file $4 differs from master!"
+    DELTA=1
+  fi
+  ERROR_COUNT=$((ERROR_COUNT+DELTA))
 }
 
 # Check if file exists
@@ -46,4 +60,10 @@ test_file "Dirty IPs"              "dirty-ips"          "-p -o output -Fi ip inp
 test_file "CIDR IPs"               "cidr-ips"           "-p -o output -Fi test input/cidr-ips.csv" "cidr-ips.csv"
 test_file "Host names"             "host-names"         "-p -o output -Fh test input/host-names.csv" "host-names.csv"
 
+printf "\nTests completed with %d errors.\n" $ERROR_COUNT
+
+if [ $ERROR_COUNT -eq 0 ]; then
+  exit 0
+fi
+exit 1
 
