@@ -22,7 +22,7 @@ install-pre-commit: verify-virtualenv
 
 
 # Test targets
-test: test-python test-e2e
+test: test-python test-e2e test-e2e-shell
 .PHONY: test
 
 test-python:
@@ -32,6 +32,10 @@ test-python:
 test-e2e:
 	uv run pytest test/e2e/
 .PHONY: test-e2e
+
+test-e2e-shell:
+	cd test/ && ./tests.sh
+.PHONY: test-e2e-shell
 
 t: test
 

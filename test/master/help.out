@@ -1,6 +1,9 @@
 usage: anonym.py [-h] [-Fn FIELD_NAME] [-Fe FIELD_EMAIL] [-Fu FIELD_ID]
                  [-Fi FIELD_IP] [-Fc FIELD_COORD] [-Fh FIELD_HOST]
-                 [-t {csv,json}] [-p] -o OUTPUT_FOLDER [-v]
+                 [-Fpr FIELD_PRICE] [-Fpn FIELD_PRODUCT_NAME]
+                 [-Fcn FIELD_COMPANY_NAME] [-Fas FIELD_ADDRESS_STREET]
+                 [-Faz FIELD_ADDRESS_ZIP] [-Fho FIELD_HOSTNAME]
+                 [-Fwo FIELD_WORD] [-t {csv,json}] [-p] -o OUTPUT_FOLDER [-v]
                  files [files ...]
 
 Anonym 1.04 - data anonymization tool
@@ -10,24 +13,38 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -Fn FIELD_NAME, --field-name FIELD_NAME
+  -Fn, --field-name FIELD_NAME
                         Field containing personal names
-  -Fe FIELD_EMAIL, --field-email FIELD_EMAIL
+  -Fe, --field-email FIELD_EMAIL
                         Field containing emails
-  -Fu FIELD_ID, --field-id FIELD_ID
+  -Fu, --field-id FIELD_ID
                         Field containing unique IDs
-  -Fi FIELD_IP, --field-ip FIELD_IP
+  -Fi, --field-ip FIELD_IP
                         Field containing IPs
-  -Fc FIELD_COORD, --field-coord FIELD_COORD
+  -Fc, --field-coord FIELD_COORD
                         Field containing coordinates
-  -Fh FIELD_HOST, --field-host FIELD_HOST
+  -Fh, --field-host FIELD_HOST
                         Field containing host names
-  -t {csv,json}, --type {csv,json}
+  -Fpr, --field-price FIELD_PRICE
+                        Field containing price
+  -Fpn, --field-product-name FIELD_PRODUCT_NAME
+                        Field containing product name
+  -Fcn, --field-company-name FIELD_COMPANY_NAME
+                        Field containing company name
+  -Fas, --field-address-street FIELD_ADDRESS_STREET
+                        Field containing address street
+  -Faz, --field-address-zip FIELD_ADDRESS_ZIP
+                        Field containing address zip
+  -Fho, --field-hostname FIELD_HOSTNAME
+                        Field containing hostname
+  -Fwo, --field-word FIELD_WORD
+                        Field containing word
+  -t, --type {csv,json}
                         Type of input files; valid values - 'csv' (default),
                         'json'
   -p, --predictable-names
                         Generate predictable artificial names (to use for
                         regression testing)
-  -o OUTPUT_FOLDER, --output-folder OUTPUT_FOLDER
+  -o, --output-folder OUTPUT_FOLDER
                         Output folder to use
   -v, --verbose         Verbose output
