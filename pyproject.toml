@@ -1,0 +1,24 @@
+[project]
+name = "anonym"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "approvaltests>=16.2.1",
+    "faker>=39.0.0",
+    "faker-commerce>=1.0.4",
+    "jsonpath-ng>=1.7.0",
+    "pytest>=9.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.2",
+    "approvaltests>=0.2.11",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

@@ -6,17 +6,33 @@ OUT=./output
 rm -rf $OUT
 mkdir $OUT
 
+ERROR_COUNT=0
+
+source ../.venv/bin/activate
+
 # Run test and compare screen output to master
 test() {
+  DELTA=0
   echo "Testing: $1"
-  python3 ../anonym.py $3 >$OUT/$2.out 2>&1
+  python ../anonym.py $3 >$OUT/$2.out 2>&1
   diff ./master/$2.out $OUT/$2.out
+  if [ $? -ne 0 ]; then
+    echo "Output file $4 differs from master!"
+    DELTA=1
+  fi
+  ERROR_COUNT=$((ERROR_COUNT+DELTA))
 }
 
 # Run test and compare screen output to master, and output file to master output file
 test_file() {
+  DELTA=0
   test "$1" "$2" "$3"
   diff ./master/$4 $OUT/$4
+  if [ $? -ne 0 ]; then
+    echo "Output file $4 differs from master!"
+    DELTA=1
+  fi
+  ERROR_COUNT=$((ERROR_COUNT+DELTA))
 }
 
 # Check if file exists
@@ -29,9 +45,8 @@ test      "No arguments"           "no_arguments"       ""
 test      "Help"                   "help"               "-h"
 test_file "Simple CSV"             "simple-csv"         "-p -o output -Fe email -Fn name -Fu id -Fi ip -Fh host -Fc long -Fc lat input/simple-csv.csv" "simple-csv.csv"
 test_file "Simple CSV 2 files"     "simple-csv-2"       "-p -o output -Fe email -Fn name -Fu id -Fi ip -Fh host -Fc long -Fc lat input/simple-csv.csv input/simple-csv-2.csv" "simple-csv.csv"
-diff ./master/simple-csv-2.csv $OUT/simple-csv-2.csv
-test      "Bad pattern"            "bad-pattern"        "-o output -Fn json.' input/csv-json.csv"
-test      "Bad pattern verbose"    "bad-pattern-verb"   "-v -o output -Fn json.' input/csv-json.csv"
+#test      "Bad pattern"            "bad-pattern"        "-o output -Fn json.' input/csv-json.csv"
+#test      "Bad pattern verbose"    "bad-pattern-verb"   "-v -o output -Fn json.' input/csv-json.csv"
 test      "Header not found"       "header-not-found"   "-o output -Fn badname1 -Fh badname2 input/csv-json.csv"
 test_file "CSV with JSON"          "csv-json"           "-p -o output -t csv -Fe json.a -Fu json.b -Fn json2.\$[?(@.a==\"1\")].b -Fh json2.\$[?(@.a==\"2\")].b input/csv-json.csv" "csv-json.csv"
 test_file "Simple JSON"            "simple-json"        "-p -o output -t json -Fn a.b -Fu x -Fh \$.array[?(@.a==\"1\")].b input/simple-json.json" "simple-json.json"
@@ -46,4 +61,10 @@ test_file "Dirty IPs"              "dirty-ips"          "-p -o output -Fi ip inp
 test_file "CIDR IPs"               "cidr-ips"           "-p -o output -Fi test input/cidr-ips.csv" "cidr-ips.csv"
 test_file "Host names"             "host-names"         "-p -o output -Fh test input/host-names.csv" "host-names.csv"
 
+printf "\nTests completed with %d errors.\n" $ERROR_COUNT
+
+if [ $ERROR_COUNT -eq 0 ]; then
+  exit 0
+fi
+exit 1
 

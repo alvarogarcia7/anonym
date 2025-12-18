@@ -369,7 +369,7 @@ class WordField(Field):
 def parse_params():
 	""" Parse parameters. """
 	global args, handler_defs
-	
+
 	parser = argparse.ArgumentParser(description=TOOL_NAME+" - data anonymization tool")
 	parser.add_argument("files", nargs='+', help="Names of the data file(s) to anonymize")
 	
@@ -400,11 +400,11 @@ def parse_params():
 	handler_defs.extend(process_field_param(args.field_ip,    IPField))
 	handler_defs.extend(process_field_param(args.field_coord, CoordField))
 	handler_defs.extend(process_field_param(args.field_host,  HostField))
-	handler_defs.extend(process_field_param(args.field_product, ProductField))
 
+	handler_defs.extend(process_field_param(args.field_word, WordField))
+	handler_defs.extend(process_field_param(args.field_product, ProductField))
 	handler_defs.extend(process_field_param(args.field_price, PriceField))
 	handler_defs.extend(process_field_param(args.field_product_name, ProductNameField))
-	handler_defs.extend(process_field_param(args.field_company_name, CompanyNameField))
 	handler_defs.extend(process_field_param(args.field_address_street, AddressField))
 	handler_defs.extend(process_field_param(args.field_address_zip, AddressFieldZip))
 	handler_defs.extend(process_field_param(args.field_hostname, HostField))
