@@ -1,12 +1,13 @@
 usage: anonym.py [-h] [-Fn FIELD_NAME] [-Fe FIELD_EMAIL] [-Fu FIELD_ID]
                  [-Fi FIELD_IP] [-Fc FIELD_COORD] [-Fh FIELD_HOST]
-                 [-Fpr FIELD_PRICE] [-Fpn FIELD_PRODUCT_NAME]
-                 [-Fcn FIELD_COMPANY_NAME] [-Fas FIELD_ADDRESS_STREET]
-                 [-Faz FIELD_ADDRESS_ZIP] [-Fho FIELD_HOSTNAME]
-                 [-Fwo FIELD_WORD] [-t {csv,json}] [-p] -o OUTPUT_FOLDER [-v]
+                 [-Fp FIELD_PRODUCT] [-Fpr FIELD_PRICE]
+                 [-Fpn FIELD_PRODUCT_NAME] [-Fcn FIELD_COMPANY_NAME]
+                 [-Fas FIELD_ADDRESS_STREET] [-Faz FIELD_ADDRESS_ZIP]
+                 [-Fho FIELD_HOSTNAME] [-Fwo FIELD_WORD] [-t {csv,json}] [-p]
+                 -o OUTPUT_FOLDER [-v]
                  files [files ...]
 
-Anonym 1.04 - data anonymization tool
+Anonym 1.05 - data anonymization tool
 
 positional arguments:
   files                 Names of the data file(s) to anonymize
@@ -25,6 +26,8 @@ options:
                         Field containing coordinates
   -Fh, --field-host FIELD_HOST
                         Field containing host names
+  -Fp, --field-product FIELD_PRODUCT
+                        Field containing product
   -Fpr, --field-price FIELD_PRICE
                         Field containing price
   -Fpn, --field-product-name FIELD_PRODUCT_NAME
