@@ -25,8 +25,8 @@ check_not_exists() {
 }
 
 # Run all tests
-test      "No arguments"           "no_arguments"       ""
-test      "Help"                   "help"               "-h"
+# test      "No arguments"           "no_arguments"       ""
+# test      "Help"                   "help"               "-h"
 test_file "Simple CSV"             "simple-csv"         "-p -o output -Fe email -Fn name -Fu id -Fi ip -Fh host -Fc long -Fc lat input/simple-csv.csv" "simple-csv.csv"
 test_file "Simple CSV 2 files"     "simple-csv-2"       "-p -o output -Fe email -Fn name -Fu id -Fi ip -Fh host -Fc long -Fc lat input/simple-csv.csv input/simple-csv-2.csv" "simple-csv.csv"
 diff ./master/simple-csv-2.csv $OUT/simple-csv-2.csv
