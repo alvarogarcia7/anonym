@@ -52,3 +52,6 @@ mypy:
 	uv run mypy .
 .PHONY: mypy
 
+typecheck: mypy
+.PHONY: typecheck
+
