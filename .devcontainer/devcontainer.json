@@ -7,8 +7,7 @@
 	],
   "build": {
     "dockerfile": "Dockerfile",
-    "context": ".",
-    "image": "anonym-devcontainer:latest"
+    "context": "."
   },
 
   "customizations": {
