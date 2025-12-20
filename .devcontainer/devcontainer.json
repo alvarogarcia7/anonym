@@ -1,0 +1,30 @@
+{
+  "name": "anonym Dev Container",
+	"workspaceFolder": "/workspace",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+	"mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
+	],
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "postCreateCommand": "python -m pip install --upgrade pip setuptools build && pip install -e .[dev] || pip install -e .; if [ -f requirements.txt ]; then pip install -r requirements.txt; fi",
+  "remoteUser": "root",
+  "settings": {
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+      "test"
+    ],
+    "python.languageServer": "Pylance"
+  }
+}

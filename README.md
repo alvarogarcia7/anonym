@@ -146,3 +146,31 @@ Version 1.04:
 Version 1.05:
 
 * Added "Product Name" field type
+
+Version 1.06:
+
+* Added devcontainer
+
+## Running commands in the Dev Container
+
+You can run commands inside a running devcontainer using one of these methods.
+
+- **VS Code (recommended):** Attach to the running container via Command Palette → "Dev Containers: Attach to Running Container...", open a terminal and run your command (e.g. `pytest -q`).
+
+- **devcontainer CLI (if installed):**
+
+```bash
+devcontainer exec --workspace-folder . -- pytest -q
+```
+
+- **Docker (`docker exec`):** Find the running container and execute a command inside it:
+
+```bash
+# List running containers and find the one for this workspace
+docker ps --format "{{.ID}} {{.Names}} {{.Image}}"
+
+# Run a command inside the container (replace <container> with the ID or name)
+docker exec -it <container> bash -lc "pytest -q"
+```
+
+Note: If your devcontainer image was built with the tag `anonym-dev` (see `.devcontainer/Dockerfile`), you can filter by image when listing containers: `docker ps --filter ancestor=anonym-dev`.
