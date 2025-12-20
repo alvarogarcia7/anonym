@@ -9,6 +9,7 @@ RUN apt-get update \
        jq \
        git \
        zsh \
+       build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
